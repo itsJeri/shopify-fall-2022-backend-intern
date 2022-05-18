@@ -152,6 +152,17 @@ function InventoryPage() {
       method: 'DELETE',
     })
       .then(r => {
+        // Handle client-side warehouse inventory update
+        const updatedWarehouses = warehouses.map((warehouse) => {
+          if (warehouse.id === item.warehouse.id) {
+            return {
+              ...warehouse,
+              items_count: warehouse.items_count - 1
+            };
+          }
+          return warehouse;
+        })
+        setWarehouses(updatedWarehouses);
         const updatedItemsArr = items.filter(({ id }) => id !== item.id);
         setItems(updatedItemsArr);
       })

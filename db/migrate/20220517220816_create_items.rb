@@ -4,6 +4,8 @@ class CreateItems < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :description
 
+      t.belongs_to :warehouse
+
       t.timestamps
     end
   end

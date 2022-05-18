@@ -4,7 +4,7 @@ import DeleteModal from './DeleteModal';
 
 import { Button } from 'react-bootstrap';
 
-function TableRow({ item, idx, updateItem, deleteItem }) {
+function TableRow({ item, warehouses, idx, updateItem, deleteItem }) {
   // Modal Handlers
   const [show, setShow] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -18,9 +18,9 @@ function TableRow({ item, idx, updateItem, deleteItem }) {
   return (
     <>
     <tr key={idx}>
-      <td>{ idx + 1 }</td>
       <td>{ item.name }</td>
       <td>{ item.description }</td>
+      <td>{ item.warehouse.name }</td>
       <td><Button onClick={handleShow}> Edit </Button></td>
     </tr>
 
@@ -35,6 +35,7 @@ function TableRow({ item, idx, updateItem, deleteItem }) {
         show={show} 
         handleClose={handleClose} 
         item={item}
+        warehouses={warehouses}
         setIsDelete={setIsDelete}
         updateItem={updateItem}
       />

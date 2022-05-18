@@ -159,21 +159,27 @@ function InventoryPage() {
 
   return (
     <div>
-      <WarehouseTable 
-        warehouses={warehouses}
-      />
-      <InventoryTable 
-        items={items} 
-        warehouses={warehouses}
-        updateItem={updateItem}
-        deleteItem={deleteItem}
-      />
-      {modalErrors ?
-        modalErrors.map((error, idx) => {
-          return <p key={idx} className='errors'>{error}</p>
-        }) : 
-        null
-      }
+      <div className='data-container'>
+        <h2>Warehouses</h2>
+        <WarehouseTable 
+          warehouses={warehouses}
+        />
+      </div>
+      <div className='data-container'>
+        <h2>Inventory</h2>
+        <InventoryTable 
+          items={items} 
+          warehouses={warehouses}
+          updateItem={updateItem}
+          deleteItem={deleteItem}
+        />
+        {modalErrors ?
+          modalErrors.map((error, idx) => {
+            return <p key={idx} className='errors'>{error}</p>
+          }) : 
+          null
+        }
+      </div>
       <div id='item-form-container'>
         <ButtonGroup style={{marginBottom: '2rem'}}>
           {radios.map((radio, idx) => (

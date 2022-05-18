@@ -3,12 +3,24 @@
 }
 
 #item-form-container {
-  width: 80%;
+  width: 50%;
   margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 5rem;
   border: solid;
   border-radius: 1rem;
   padding: 2rem;
   border-color: blue;
+}
+
+.data-container {
+  width: 90%;
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.data-container h2 {
+  text-align: left;
 }
 
 .errors {

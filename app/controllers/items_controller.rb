@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   # GET /items
   def index
     # Maintain oldest created first on refresh
-    items = Item.all.order(:created_at)
+    items = Item.all.sort_by_oldest
     render json: items, status: :ok
   end
 
@@ -17,7 +17,8 @@ class ItemsController < ApplicationController
   # PATCH /items/:id
   def update
     item = Item.find_by!(id: params[:id])
-    item.update(item_params)
+    # raise exception if invalid params
+    item.update!(item_params)
     render json: item, status: :accepted
   end
 

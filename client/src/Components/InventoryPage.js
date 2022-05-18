@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import InventoryTable from './InventoryTable.js';
 import InventoryForm from './InventoryForm.js';
 import WarehouseForm from './WarehouseForm.js';
+import WarehouseTable from './WarehouseTable.js';
 
 import { ButtonGroup, ToggleButton } from 'react-bootstrap';
 
@@ -9,6 +10,7 @@ function InventoryPage() {
   const [items, setItems] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
+  const [modalErrors, setModalErrors] = useState([]);
   const [radioValue, setRadioValue] = useState('1');
 
   const radios = [
@@ -17,6 +19,7 @@ function InventoryPage() {
   ]
 
   useEffect(() => {
+    // GET //
     fetch('/items')
       .then(r => r.json())
       .then(items => {
@@ -44,6 +47,17 @@ function InventoryPage() {
         if (r.ok) {
           r.json()
           .then(newItem => {
+            // Handle client-side warehouse inventory update
+            const updatedWarehouses = warehouses.map((warehouse) => {
+              if (warehouse.id === newItem.warehouse.id) {
+                return {
+                  ...warehouse,
+                  items_count: warehouse.items_count + 1
+                };
+              }
+              return warehouse;
+            })
+            setWarehouses(updatedWarehouses);
             setItems([...items, newItem]);
             setFormErrors([]);
           })
@@ -87,17 +101,49 @@ function InventoryPage() {
       },
       body: JSON.stringify(updatedItem),
     })
-      .then(r => r.json())
-      .then (updatedItem => {
-        const updatedItemsArr = items.map((item) => {
-          if (item.id === updatedItem.id) {
-            return updatedItem;
-          }
-          return item;
-        });
-        setItems(updatedItemsArr);
+      .then(r => {
+        if (r.ok) {
+          r.json()
+          .then (updatedItem => {
+            const updatedItemsArr = items.map((item) => {
+              if (item.id === updatedItem.id) {
+                return updatedItem;
+              }
+              return item;
+            });
+            // Handle client-side warehouse inventory update
+            if (item.warehouse.id !== updatedItem.warehouse.id) {
+              updateClientWarehouses(item, updatedItem);
+            }
+
+            setItems(updatedItemsArr);
+            setModalErrors([]);
+          })
+        } else {
+          r.json()
+          .then(e => setModalErrors(e.errors));
+        }
       })
-      .catch(err => {setFormErrors(err)})
+
+  }
+
+  function updateClientWarehouses(item, updatedItem) {
+    const updatedWarehouses = warehouses.map((warehouse) => {
+      if (warehouse.id === item.warehouse.id) {
+        return {
+          ...warehouse,
+          items_count: warehouse.items_count - 1
+        };
+      }
+      if (warehouse.id === updatedItem.warehouse.id) {
+        return {
+          ...warehouse,
+          items_count: warehouse.items_count + 1
+        };
+      }
+      return warehouse;
+    })
+    setWarehouses(updatedWarehouses);
   }
 
   // DELETE //
@@ -109,17 +155,25 @@ function InventoryPage() {
         const updatedItemsArr = items.filter(({ id }) => id !== item.id);
         setItems(updatedItemsArr);
       })
-      .catch(err => {setFormErrors(err)});
   }
 
   return (
     <div>
+      <WarehouseTable 
+        warehouses={warehouses}
+      />
       <InventoryTable 
         items={items} 
         warehouses={warehouses}
         updateItem={updateItem}
         deleteItem={deleteItem}
       />
+      {modalErrors ?
+        modalErrors.map((error, idx) => {
+          return <p key={idx} className='errors'>{error}</p>
+        }) : 
+        null
+      }
       <div id='item-form-container'>
         <ButtonGroup style={{marginBottom: '2rem'}}>
           {radios.map((radio, idx) => (

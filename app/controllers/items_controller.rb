@@ -6,16 +6,6 @@ class ItemsController < ApplicationController
     render json: items, status: :ok
   end
 
-  # # GET /items/:id
-  # def show
-  #   item = Item.find_by(id: params[:id])
-  #   if item
-  #     render json: item, status: :ok
-  #   else
-  #     render json: { error: 'Item not found' }, status: :not_found
-  #   end
-  # end
-
   # POST /items
   def create
     # Bang raises exception if record is invalid
@@ -25,24 +15,16 @@ class ItemsController < ApplicationController
 
   # PATCH /items/:id
   def update
-    item = Item.find_by(id: params[:id])
-    if item
-      item.update(item_params)
-      render json: item, status: :accepted
-    else
-      render json: { errors: ['Item not found'] }, status: :not_found
-    end
+    item = Item.find_by!(id: params[:id])
+    item.update(item_params)
+    render json: item, status: :accepted
   end
 
   # DELETE /items/:id
   def destroy
-    item = Item.find_by(id: params[:id])
-    if item
-      item.destroy
-      head :no_content
-    else
-      render json: { errors: ['Item not found'] }, status: :not_found
-    end
+    item = Item.find_by!(id: params[:id])
+    item.destroy
+    head :no_content
   end
 
   private

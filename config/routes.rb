@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  resources :warehouses
-  resources :items, only: [:index, :show, :create, :update, :destroy]
+  resources :warehouses, only: [:index, :create]
+  resources :items, only: [:index, :create, :update, :destroy]
   
   # Handle non-API requests
   get '*path',

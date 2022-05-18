@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::API
   include ActionController::Cookies
 
+  # All subclasses performing CRUD that raises an exception will be resuced with HTTP response 422
   rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
   private

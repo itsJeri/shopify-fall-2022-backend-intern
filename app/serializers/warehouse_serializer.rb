@@ -1,3 +1,5 @@
 class WarehouseSerializer < ActiveModel::Serializer
-  attributes :id, :name, :street, :state, :country
+  attributes :id, :name, :street, :city, :country
+
+  has_many :items
 end

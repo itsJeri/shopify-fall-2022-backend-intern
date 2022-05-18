@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import InventoryTable from './InventoryTable.js';
 import InventoryForm from './InventoryForm.js';
+import WarehouseForm from './WarehouseForm.js';
 
 function InventoryPage() {
   const [items, setItems] = useState([]);
+  const [warehouses, setWarehouses] = useState([]);
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
@@ -11,6 +13,13 @@ function InventoryPage() {
       .then(r => r.json())
       .then(items => {
         setItems(items)
+      })
+    
+    fetch('/warehouses')
+      .then(r => r.json())
+      .then(warehouses => {
+        setWarehouses(warehouses)
+        console.log(warehouses)
       })
   }, [])
 
@@ -32,6 +41,23 @@ function InventoryPage() {
       .catch(err => {setErrors(err)});
   }
 
+  function createWarehouse(e, newWarehouse) {
+    e.preventDefault();
+    fetch('/warehouses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newWarehouse)
+    })
+      .then(r => r.json())
+      .then(newWarehouse => {
+        setWarehouses([...warehouses, newWarehouse]);
+        setErrors([]);
+      })
+      .catch(err => {setErrors(err)});
+  }
+
   // PATCH //
   function updateItem(e, item, updatedItem) {
     e.preventDefault();
@@ -42,7 +68,8 @@ function InventoryPage() {
       },
       body: JSON.stringify(updatedItem),
     })
-      .then(r => {
+      .then(r => r.json())
+      .then (updatedItem => {
         const updatedItemsArr = items.map((item) => {
           if (item.id === updatedItem.id) {
             return updatedItem;
@@ -70,11 +97,13 @@ function InventoryPage() {
     <div>
       <InventoryTable 
         items={items} 
+        warehouses={warehouses}
         updateItem={updateItem}
         deleteItem={deleteItem}
       />
       <div id='item-form-container'>
-       <InventoryForm createItem={createItem}/>
+        <InventoryForm warehouses={warehouses} createItem={createItem}/>
+        <WarehouseForm createWarehouse={createWarehouse} />
       </div>
     </div>
   )

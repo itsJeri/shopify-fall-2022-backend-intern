@@ -10,33 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_18_023959) do
+ActiveRecord::Schema[7.0].define(version: 2022_05_18_050458) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "citext"
   enable_extension "plpgsql"
 
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "warehouse_items", force: :cascade do |t|
     t.bigint "warehouse_id"
-    t.bigint "item_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["item_id"], name: "index_warehouse_items_on_item_id"
-    t.index ["warehouse_id"], name: "index_warehouse_items_on_warehouse_id"
+    t.index ["warehouse_id"], name: "index_items_on_warehouse_id"
   end
 
   create_table "warehouses", force: :cascade do |t|
-    t.string "name"
+    t.citext "name"
     t.string "street"
     t.string "city"
     t.string "country"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_warehouses_on_name", unique: true
   end
 
 end

@@ -2,11 +2,12 @@ import { useState } from 'react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
-function EditModal({ show, handleClose, item, setIsDelete, updateItem }) {
+function EditModal({ show, handleClose, item, warehouses, setIsDelete, updateItem }) {
   const [editItemForm, setEditItemForm] = useState({
     id: item.id,
     name: item.name,
-    description: item.description
+    description: item.description,
+    warehouse_id: item.warehouse_id
   });
 
   function onEditField(e) {
@@ -20,6 +21,12 @@ function EditModal({ show, handleClose, item, setIsDelete, updateItem }) {
     handleClose();
     updateItem(e, item, editItemForm);
   }
+
+  const warehouseOptions = warehouses.map((warehouse) => {
+      return (
+        <option value={warehouse.id}>{warehouse.name} ({warehouse.street} | {warehouse.city}, {warehouse.country})</option>
+      )
+  })
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -38,6 +45,14 @@ function EditModal({ show, handleClose, item, setIsDelete, updateItem }) {
           <Form.Label>Item Description</Form.Label>
           <Form.Control id='description' type="text" placeholder="Enter a description" value={editItemForm.description} onChange={(e) => onEditField(e)} />
         </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Warehouse</Form.Label>
+          <Form.Select id='warehouse_id' defaultValue={item.warehouse.id} value={editItemForm.warehouse_id} onChange={(e) => onEditField(e)}>
+            {warehouseOptions}
+          </Form.Select>
+        </Form.Group>
+
         <Button variant="danger" onClick={() => setIsDelete(true)}>
           Delete
         </Button>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 
-function WarehouseForm({ createWarehouse }) {
+function WarehouseForm({ createWarehouse, formErrors }) {
   const [newWarehouseForm, setNewWarehouseForm] = useState({
     name: '',
     street: '',
@@ -38,6 +38,13 @@ function WarehouseForm({ createWarehouse }) {
         <Form.Label>Country</Form.Label>
         <Form.Control id='country' type="text" placeholder="Enter Country" value={newWarehouseForm.country} onChange={(e) => onEditField(e)} />
       </Form.Group>
+
+      {formErrors ?
+        formErrors.map(error => {
+          return <p className='errors'>{error}</p>
+        }) : 
+        null
+      }
 
       <Button variant="primary" onClick={(e) => createWarehouse(e, newWarehouseForm)}>
         Submit

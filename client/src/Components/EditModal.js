@@ -24,7 +24,7 @@ function EditModal({ show, handleClose, item, warehouses, setIsDelete, updateIte
 
   const warehouseOptions = warehouses.map((warehouse) => {
       return (
-        <option value={warehouse.id}>{warehouse.name} ({warehouse.street} | {warehouse.city}, {warehouse.country})</option>
+        <option key={warehouse.id} value={warehouse.id}>{warehouse.name} ({warehouse.street} | {warehouse.city}, {warehouse.country})</option>
       )
   })
 

@@ -2,7 +2,8 @@ class ItemsController < ApplicationController
 
   # GET /items
   def index
-    items = Item.all
+    # Maintain oldest created first on refresh
+    items = Item.all.order(:created_at)
     render json: items, status: :ok
   end
 

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import TableRow from './TableRow';
 
-import { Table, Button } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 function InventoryTable({ items, warehouses, updateItem, deleteItem }) {
   
@@ -11,7 +11,6 @@ function InventoryTable({ items, warehouses, updateItem, deleteItem }) {
         key={idx}
         item={item}
         warehouses={warehouses}
-        idx={idx}
         updateItem={updateItem}
         deleteItem={deleteItem}
       />

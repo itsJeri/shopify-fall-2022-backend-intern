@@ -52,8 +52,8 @@ function InventoryForm({ warehouses, createItem, formErrors }) {
         </Form.Select>
       </Form.Group>
       {formErrors ?
-        formErrors.map(error => {
-          return <p className='errors'>{error}</p>
+        formErrors.map((error, idx) => {
+          return <p key={idx} className='errors'>{error}</p>
         }) : 
         null
       }

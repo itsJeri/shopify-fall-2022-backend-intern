@@ -3,10 +3,18 @@ import InventoryTable from './InventoryTable.js';
 import InventoryForm from './InventoryForm.js';
 import WarehouseForm from './WarehouseForm.js';
 
+import { ButtonGroup, ToggleButton } from 'react-bootstrap';
+
 function InventoryPage() {
   const [items, setItems] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
-  const [errors, setErrors] = useState([]);
+  const [formErrors, setFormErrors] = useState([]);
+  const [radioValue, setRadioValue] = useState('1');
+
+  const radios = [
+    { name: 'Add Item', value: '1'},
+    { name: 'Add Warehouse', value: '2'}
+  ]
 
   useEffect(() => {
     fetch('/items')
@@ -19,7 +27,6 @@ function InventoryPage() {
       .then(r => r.json())
       .then(warehouses => {
         setWarehouses(warehouses)
-        console.log(warehouses)
       })
   }, [])
 
@@ -33,12 +40,18 @@ function InventoryPage() {
       },
       body: JSON.stringify(newItem)
     })
-      .then(r => r.json())
-      .then(newItem => {
-        setItems([...items, newItem]);
-        setErrors([]);
+      .then(r => {
+        if (r.ok) {
+          r.json()
+          .then(newItem => {
+            setItems([...items, newItem]);
+            setFormErrors([]);
+          })
+        } else {
+          r.json()
+          .then(e => setFormErrors(e.errors));
+        }
       })
-      .catch(err => {setErrors(err)});
   }
 
   function createWarehouse(e, newWarehouse) {
@@ -50,12 +63,18 @@ function InventoryPage() {
       },
       body: JSON.stringify(newWarehouse)
     })
-      .then(r => r.json())
-      .then(newWarehouse => {
-        setWarehouses([...warehouses, newWarehouse]);
-        setErrors([]);
+      .then(r => {
+        if (r.ok) {
+          r.json()
+          .then(newWarehouse => {
+            setWarehouses([...warehouses, newWarehouse]);
+            setFormErrors([]);
+          })
+        } else {
+          r.json()
+          .then(e => setFormErrors(e.errors));
+        }
       })
-      .catch(err => {setErrors(err)});
   }
 
   // PATCH //
@@ -78,7 +97,7 @@ function InventoryPage() {
         });
         setItems(updatedItemsArr);
       })
-      .catch(err => {setErrors(err)})
+      .catch(err => {setFormErrors(err)})
   }
 
   // DELETE //
@@ -90,7 +109,7 @@ function InventoryPage() {
         const updatedItemsArr = items.filter(({ id }) => id !== item.id);
         setItems(updatedItemsArr);
       })
-      .catch(err => {setErrors(err)});
+      .catch(err => {setFormErrors(err)});
   }
 
   return (
@@ -102,8 +121,28 @@ function InventoryPage() {
         deleteItem={deleteItem}
       />
       <div id='item-form-container'>
-        <InventoryForm warehouses={warehouses} createItem={createItem}/>
-        <WarehouseForm createWarehouse={createWarehouse} />
+        <ButtonGroup style={{marginBottom: '2rem'}}>
+          {radios.map((radio, idx) => (
+            <ToggleButton
+              key={idx}
+              id={`radio-${idx}`}
+              type='radio'
+              name='radio'
+              value={radio.value}
+              checked={radioValue === radio.value}
+              onChange={(e) => {
+                setRadioValue(e.currentTarget.value)
+                setFormErrors([]);
+              }}
+            >
+              {radio.name}
+            </ToggleButton>
+          ))}
+        </ButtonGroup>
+        {radioValue === '1' ?
+          <InventoryForm warehouses={warehouses} createItem={createItem} formErrors={formErrors} /> :
+          <WarehouseForm createWarehouse={createWarehouse} formErrors={formErrors} />
+        }
       </div>
     </div>
   )

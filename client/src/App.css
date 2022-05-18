@@ -10,3 +10,7 @@
   padding: 2rem;
   border-color: blue;
 }
+
+.errors {
+  color: red;
+}

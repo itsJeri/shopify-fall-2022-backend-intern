@@ -8,7 +8,8 @@ class WarehousesController < ApplicationController
 
   # POST /warehouses
   def create
-    warehouse = Warehouse.create(warehouse_params)
+    # Bang raises exception if record is invalid
+    warehouse = Warehouse.create!(warehouse_params)
     render json: warehouse, status: :created
   end
 

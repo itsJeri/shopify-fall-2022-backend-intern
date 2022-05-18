@@ -6,19 +6,20 @@ class ItemsController < ApplicationController
     render json: items, status: :ok
   end
 
-  # GET /items/:id
-  def show
-    item = Item.find_by(id: params[:id])
-    if item
-      render json: item, status: :ok
-    else
-      render json: { error: 'Item not found' }, status: :not_found
-    end
-  end
+  # # GET /items/:id
+  # def show
+  #   item = Item.find_by(id: params[:id])
+  #   if item
+  #     render json: item, status: :ok
+  #   else
+  #     render json: { error: 'Item not found' }, status: :not_found
+  #   end
+  # end
 
   # POST /items
   def create
-    item = Item.create(item_params)
+    # Bang raises exception if record is invalid
+    item = Item.create!(item_params)
     render json: item, status: :created
   end
 
@@ -29,7 +30,7 @@ class ItemsController < ApplicationController
       item.update(item_params)
       render json: item, status: :accepted
     else
-      render json: { error: 'Item not found' }, status: :not_found
+      render json: { errors: ['Item not found'] }, status: :not_found
     end
   end
 
@@ -40,7 +41,7 @@ class ItemsController < ApplicationController
       item.destroy
       head :no_content
     else
-      render json: { error: 'Item not found' }, status: :not_found
+      render json: { errors: ['Item not found'] }, status: :not_found
     end
   end
 

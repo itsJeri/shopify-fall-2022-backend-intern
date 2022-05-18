@@ -16,6 +16,17 @@ function WarehouseForm({ createWarehouse, formErrors }) {
     })
   }
 
+  function handleSubmit(e) {
+    createWarehouse(e, newWarehouseForm);
+    // reset form
+    setNewWarehouseForm({
+      name: '',
+      street: '',
+      city: '',
+      country: ''
+    })
+  }
+
   return (
     <Form>
       <h2>Add Warehouse</h2>
@@ -46,7 +57,7 @@ function WarehouseForm({ createWarehouse, formErrors }) {
         null
       }
 
-      <Button variant="primary" onClick={(e) => createWarehouse(e, newWarehouseForm)}>
+      <Button variant="primary" onClick={(e) => handleSubmit(e)}>
         Submit
       </Button>
     </Form>

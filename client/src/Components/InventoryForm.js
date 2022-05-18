@@ -15,6 +15,16 @@ function InventoryForm({ warehouses, createItem, formErrors }) {
     })
   }
 
+  function handleSubmit(e) {
+    createItem(e, newItemForm);
+    // reset form
+    setNewItemForm({
+      ...newItemForm,
+      name: '',
+      description: ''
+    })
+  }
+
   const warehouseOptions = warehouses.map((warehouse) => {
     return (
       <option key={warehouse.id} value={warehouse.id}>{warehouse.name} ({warehouse.street} | {warehouse.city}, {warehouse.country})</option>
@@ -48,7 +58,7 @@ function InventoryForm({ warehouses, createItem, formErrors }) {
         null
       }
 
-      <Button variant="primary" onClick={(e) => createItem(e, newItemForm)}>
+      <Button variant="primary" onClick={(e) => handleSubmit(e)}>
         Submit
       </Button>
     </Form>

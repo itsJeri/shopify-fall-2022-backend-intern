@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
-function EditModal({ show, handleClose, item, warehouses, setIsDelete, updateItem }) {
+function EditModal({ show, handleClose, item, warehouses, setIsDelete, updateItem, modalErrors, success }) {
   const [editItemForm, setEditItemForm] = useState({
     id: item.id,
     name: item.name,
@@ -18,7 +18,6 @@ function EditModal({ show, handleClose, item, warehouses, setIsDelete, updateIte
   }
 
   function handleSaveEdit(e) {
-    handleClose();
     updateItem(e, item, editItemForm);
   }
 
@@ -52,6 +51,17 @@ function EditModal({ show, handleClose, item, warehouses, setIsDelete, updateIte
             {warehouseOptions}
           </Form.Select>
         </Form.Group>
+
+        {modalErrors ?
+          modalErrors.map((error, idx) => {
+            return <p key={idx} className='errors'>{error}</p>
+          }) : 
+          null
+        }
+        {success ?
+          <p className='success'>Changes Saved Successfully</p> :
+          null
+        }
 
         <Button variant="danger" onClick={() => setIsDelete(true)}>
           Delete

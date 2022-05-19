@@ -4,7 +4,7 @@ import DeleteModal from './DeleteModal';
 
 import { Button } from 'react-bootstrap';
 
-function TableRow({ item, warehouses, updateItem, deleteItem }) {
+function TableRow({ item, warehouses, updateItem, deleteItem, modalErrors, success, setSuccess }) {
   // Modal Handlers
   const [show, setShow] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -12,6 +12,7 @@ function TableRow({ item, warehouses, updateItem, deleteItem }) {
   const handleClose = () => { 
     setShow(false);
     setIsDelete(false);
+    setSuccess(false);
   }
   const handleShow = () => setShow(true);
 
@@ -38,6 +39,9 @@ function TableRow({ item, warehouses, updateItem, deleteItem }) {
         warehouses={warehouses}
         setIsDelete={setIsDelete}
         updateItem={updateItem}
+        modalErrors={modalErrors}
+        success={success}
+        setSuccess={setSuccess}
       />
     }
     </>

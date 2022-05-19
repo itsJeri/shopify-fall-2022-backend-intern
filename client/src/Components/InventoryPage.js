@@ -11,6 +11,7 @@ function InventoryPage() {
   const [warehouses, setWarehouses] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
   const [modalErrors, setModalErrors] = useState([]);
+  const [success, setSuccess] = useState(false);
   const [radioValue, setRadioValue] = useState('1');
 
   const radios = [
@@ -118,10 +119,14 @@ function InventoryPage() {
 
             setItems(updatedItemsArr);
             setModalErrors([]);
+            setSuccess(true);
           })
         } else {
           r.json()
-          .then(e => setModalErrors(e.errors));
+          .then(e => {
+            setModalErrors(e.errors)
+            setSuccess(false);
+          });
         }
       })
 
@@ -183,13 +188,10 @@ function InventoryPage() {
           warehouses={warehouses}
           updateItem={updateItem}
           deleteItem={deleteItem}
+          modalErrors={modalErrors}
+          success={success}
+          setSuccess={setSuccess}
         />
-        {modalErrors ?
-          modalErrors.map((error, idx) => {
-            return <p key={idx} className='errors'>{error}</p>
-          }) : 
-          null
-        }
       </div>
       <div id='item-form-container'>
         <ButtonGroup style={{marginBottom: '2rem'}}>

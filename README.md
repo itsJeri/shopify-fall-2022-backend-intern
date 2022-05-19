@@ -1,8 +1,12 @@
 # Welcome!
 
-This application is designed for Shopify's Fall 2022 Backend Developer Intern Challenge
+This application is designed for Shopify's Fall 2022 Backend Developer Intern Challenge.
+
+DEMO: https://youtu.be/Xj2JkVjOI7w
 
 ## Requirements
+
+Build an inventory tracking web application for a logistics company.
 
 Basic CRUD Functionality:
 - Create Inventory Items
@@ -10,11 +14,64 @@ Basic CRUD Functionality:
 - Delete Items
 - View a list of Items
 
+Additional Functionalities:
+- Ability to create warehouses/locations and assign inventory to specific locations
+
 ## Installation
 
-Execute:
+Requirements:
+- Ruby 2.7.4
+- NodeJS (v16) and npm
+- PostgreSQL
+
+#### Install latest versions of `bundler` and `rails`.
+
+```
+$ gem install bundler
+$ gem install rails
+```
+
+#### If your Node is not updated
+
+```
+$ npm i -g npm
+```
+
+#### PostgreSQL installation for WSL
+
+```
+$ sudo apt update
+$ sudo apt install postgresql postgresql-contrib libpq-dev
+```
+
+Confirm Postgres was installed successfully:
+```
+$ psql --version
+```
+
+Run this command to start Postgres service:
+```
+$ sudo service postgresql start
+```
+
+If you ever get stuck: https://docs.microsoft.com/en-us/windows/wsl/tutorials/wsl-database#install-postgresql
+
+#### PostgreSQL installation for OSX
+
+Use Homebrew:
+```
+$ brew install postgresql
+```
+
+Run this command to start Postgres service:
+```
+$ brew services start postgresql
+```
+
+#### Execute:
 ```
 $ bundle i
+$ rails db:create
 $ rails db:migrate db:seed
 $ npm i --prefix client
 ```

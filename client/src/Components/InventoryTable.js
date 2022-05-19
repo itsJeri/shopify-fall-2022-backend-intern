@@ -3,7 +3,7 @@ import TableRow from './TableRow';
 
 import { Table } from 'react-bootstrap';
 
-function InventoryTable({ items, warehouses, updateItem, deleteItem }) {
+function InventoryTable({ items, warehouses, updateItem, deleteItem, modalErrors, success, setSuccess }) {
   
   const tableElements = items.map((item, idx) => {
     return (
@@ -13,6 +13,9 @@ function InventoryTable({ items, warehouses, updateItem, deleteItem }) {
         warehouses={warehouses}
         updateItem={updateItem}
         deleteItem={deleteItem}
+        modalErrors={modalErrors}
+        success={success}
+        setSuccess={setSuccess}
       />
     )
   })
